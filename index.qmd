@@ -1,0 +1,83 @@
+---
+title: "Tablero de Control sobre el conjunto de datos Iris"
+format: 
+  dashboard:
+    orientation: columns
+    scrolling: False
+---
+
+```{r}
+#| label: carga-paquetes
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(plotly)
+library(DT)
+```
+
+# Tabla
+
+## Column
+
+```{r}
+#| label: tabla-flores
+#| title: "Lista de datos del conjunto Iris."
+
+iris |>
+  datatable()
+```
+
+# Gráficos
+
+## Column {.tabset}
+
+```{r}
+#| label: grafico-ancho-vs-largo-petalos
+#| title: "Relación entre el ancho y el largo de los pétalos."
+
+grafico_ggplot2 <-
+  iris |>
+  ggplot(aes(x = Petal.Width,
+             y = Petal.Length)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  xlab("Ancho de los pétalos") +
+  ylab("Largo de los pétalos")
+
+ggplotly(grafico_ggplot2) |> config(locale = "es")
+```
+
+```{r}
+#| label: grafico-ancho-vs-largo-sepalos
+#| title: "Relación entre el ancho y el largo de los sépalos."
+
+grafico_ggplot2 <-
+  iris |>
+  ggplot(aes(x = Sepal.Width,
+             y = Sepal.Length)) +
+  geom_point() + 
+  geom_smooth(method = "lm") +
+  xlab("Ancho de los sépalos") +
+  ylab("Largo de los sépalos")
+
+ggplotly(grafico_ggplot2) |> config(locale = "es")
+```
+
+```{r}
+#| label: promedio-longitud-petalo-especie
+#| title: "Promedio de Longitud de pétalos por especie."
+
+grafico_ggplot2 <-
+  iris |>
+  group_by(Species) |>
+  summarise(promedio_longitud_petalo = mean(Petal.Length)) |>
+  ggplot(aes(
+    x = Species,
+    y = promedio_longitud_petalo
+  )) +
+  geom_col()
+
+ggplotly(grafico_ggplot2) |> config(locale = "es")
+```
+
